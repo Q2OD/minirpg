@@ -1,13 +1,11 @@
-// ▗▖ ▗▖▗▞▀▚▖█ ▗▞▀▘ ▄▄▄  ▄▄▄▄  ▗▞▀▚▖       ■   ▄▄▄      ▗▖  ▗▖▄ ▄▄▄▄  ▄     ▗▄▄▖ ▗▄▄▖  ▗▄▄▖
-// ▐▌ ▐▌▐▛▀▀▘█ ▝▚▄▖█   █ █ █ █ ▐▛▀▀▘    ▗▄▟▙▄▖█   █     ▐▛▚▞▜▌▄ █   █ ▄     ▐▌ ▐▌▐▌ ▐▌▐▌   
-// ▐▌ ▐▌▝▚▄▄▖█     ▀▄▄▄▀ █   █ ▝▚▄▄▖      ▐▌  ▀▄▄▄▀     ▐▌  ▐▌█ █   █ █     ▐▛▀▚▖▐▛▀▘ ▐▌▝▜▌
-// ▐▙█▟▌     █                            ▐▌            ▐▌  ▐▌█       █     ▐▌ ▐▌▐▌   ▝▚▄▞▘
-//                                        ▐▌                                               
-// ▗▄▄▖ ▄   ▄      ▗▄▄▖▗▞▀▜▌█ ▗▞▀▚▖▗▖       ▗▖  ▗▖▗▞▀▜▌█  ▐▌
-// ▐▌ ▐▌█   █     ▐▌   ▝▚▄▟▌█ ▐▛▀▀▘▐▌       ▐▛▚▞▜▌▝▚▄▟▌▀▄▄▞▘
-// ▐▛▀▚▖ ▀▀▀█     ▐▌        █ ▝▚▄▄▖▐▛▀▚▖    ▐▌  ▐▌          
-// ▐▙▄▞▘▄   █     ▝▚▄▄▖     █      ▐▙▄▞▘    ▐▌  ▐▌          
-//       ▀▀▀                                                                                                                                                                                                                          
+// ▗▖ ▗▖▗▄▄▄▖▗▖    ▗▄▄▖ ▗▄▖ ▗▖  ▗▖▗▄▄▄▖    ▗▄▄▄▖▗▄▖     ▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖    ▗▄▄▖ ▗▄▄▖  ▗▄▄▖
+// ▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▌ ▐▌▐▛▚▞▜▌▐▌         █ ▐▌ ▐▌    ▐▛▚▞▜▌  █  ▐▛▚▖▐▌  █      ▐▌ ▐▌▐▌ ▐▌▐▌   
+// ▐▌ ▐▌▐▛▀▀▘▐▌   ▐▌   ▐▌ ▐▌▐▌  ▐▌▐▛▀▀▘      █ ▐▌ ▐▌    ▐▌  ▐▌  █  ▐▌ ▝▜▌  █      ▐▛▀▚▖▐▛▀▘ ▐▌▝▜▌
+// ▐▙█▟▌▐▙▄▄▖▐▙▄▄▖▝▚▄▄▖▝▚▄▞▘▐▌  ▐▌▐▙▄▄▖      █ ▝▚▄▞▘    ▐▌  ▐▌▗▄█▄▖▐▌  ▐▌▗▄█▄▖    ▐▌ ▐▌▐▌   ▝▚▄▞▘                                                                                              
+// ▗▄▄▖▗▖  ▗▖     ▗▄▄▖ ▗▄▖ ▗▖   ▗▄▄▄▖▗▄▄▖     ▗▖  ▗▖ ▗▄▖ ▗▖ ▗▖
+// ▐▌ ▐▌▝▚▞▘     ▐▌   ▐▌ ▐▌▐▌   ▐▌   ▐▌ ▐▌    ▐▛▚▞▜▌▐▌ ▐▌▐▌ ▐▌
+// ▐▛▀▚▖ ▐▌      ▐▌   ▐▛▀▜▌▐▌   ▐▛▀▀▘▐▛▀▚▖    ▐▌  ▐▌▐▛▀▜▌▐▌ ▐▌
+// ▐▙▄▞▘ ▐▌      ▝▚▄▄▖▐▌ ▐▌▐▙▄▄▖▐▙▄▄▖▐▙▄▞▘    ▐▌  ▐▌▐▌ ▐▌▝▚▄▞▘                                                                                                                                                                                                                                        
 #![allow(dead_code)]
 // STD Libs
 use std::io;
@@ -35,6 +33,8 @@ struct Character {
     is_blocking: bool
 }
 // Methods
+impl Attacks {
+}
 impl Character {
     fn new_character() -> Character {
         println!("Please enter a character name");
@@ -45,8 +45,8 @@ impl Character {
         let defense = roll_stat("Defense", 3, 7);
         // Static Stats
         let level = 1;
-        let xp = 0;
-        let xp_to_next = Self::xp_needed_for_level(level);
+        let _xp = 0;
+        let _xp_to_next = Self::xp_needed_for_level(level);
         let health = max_health;
         let blocking = false;
 
@@ -143,7 +143,6 @@ impl Character {
                 let health = (base_health as f32 * factor) as i32;
                 let attack = (base_attack as f32 * factor) as i32;
                 let defense = (base_defense as f32 * factor) as i32;
-
                 Character {
                     name: "Orc".to_string(),
                     health,
@@ -244,16 +243,7 @@ enum XpEvents {
 }
 // Main Game Function
 fn main() {
-    println!(
-    "                                                                                                                                                                                                                                                                                                                                       
-                                                                                                                                                                                                                                                                                                                                       
-▗▖ ▗▖▗▞▀▚▖█ ▗▞▀▘ ▄▄▄  ▄▄▄▄  ▗▞▀▚▖       ■   ▄▄▄      ▗▖  ▗▖▄ ▄▄▄▄  ▄     ▗▄▄▖ ▗▄▄▖  ▗▄▄▖
-▐▌ ▐▌▐▛▀▀▘█ ▝▚▄▖█   █ █ █ █ ▐▛▀▀▘    ▗▄▟▙▄▖█   █     ▐▛▚▞▜▌▄ █   █ ▄     ▐▌ ▐▌▐▌ ▐▌▐▌   
-▐▌ ▐▌▝▚▄▄▖█     ▀▄▄▄▀ █   █ ▝▚▄▄▖      ▐▌  ▀▄▄▄▀     ▐▌  ▐▌█ █   █ █     ▐▛▀▚▖▐▛▀▘ ▐▌▝▜▌
-▐▙█▟▌     █                            ▐▌            ▐▌  ▐▌█       █     ▐▌ ▐▌▐▌   ▝▚▄▞▘
-                                       ▐▌                                               
-                                                                                        
-                                                                                        ");
+    print_text(1);
     let mut player = Character::new_character();
     game_loop(&mut player);
 }
@@ -262,6 +252,7 @@ fn game_loop(player: &mut Character) {
         let mut enemy = encounter_enemy(&player);
         let game = battle(player, &mut enemy);
         if game {
+            player.health = player.max_health
             // Xp Events
         } else {
             println!("You suck get better... bye.");
@@ -286,11 +277,11 @@ fn encounter_enemy(player: &Character) -> Character {
 fn battle(player: &mut Character, enemy: &mut Character) -> bool {
     loop {
         if !player.is_alive() {
-            println!("You were defeated...");
+            print_text(3);
             return false;
         }
         if !enemy.is_alive() {
-            println!("You win!");
+            print_text(2);
             return true;
         }
         print_status(player, enemy);
@@ -298,12 +289,12 @@ fn battle(player: &mut Character, enemy: &mut Character) -> bool {
         let enemy_action = get_enemy_action(enemy);
         apply_action(player, enemy, player_action);
         if !enemy.is_alive() {
-            println!("You win!");
+            print_text(2);
             return true;
         }
         apply_action(enemy, player, enemy_action);
         if !player.is_alive() {
-            println!("You were defeated...");
+            print_text(3);
             return false;
         }
         reset_blocking(player, enemy);
@@ -318,16 +309,16 @@ fn roll_stat(stat_name: &str, min: i32, max: i32) -> i32 {
     );
     return value
 }
-fn roll_level_stat(player:&Character, stat_name: &str, min: i32, max: i32) -> i32 {
-    let factor = 1.0 + (player.level as f32 * 0.05);
-    let min = 1;
-    let value = rand::thread_rng().gen_range(min..=max);
-    println!(
-        "Rolling {} ({}-{})... you got {}!",
-        stat_name, min, max, value
-    );
-    return value
-}
+// fn roll_level_stat(player:&Character, stat_name: &str, min: i32, max: i32) -> i32 {
+//     let factor = 1.0 + (player.level as f32 * 0.05);
+//     let min_factored = 1;
+//     let value = rand::thread_rng().gen_range(min..=max);
+//     println!(
+//         "Rolling {} ({}-{})... you got {}!",
+//         stat_name, min, max, value
+//     );
+//     return value
+// }
 fn input() -> String {
     let mut line = String::new();
     io::stdin()
@@ -349,8 +340,14 @@ fn get_player_action () -> Action {
         }
     }
 }
-fn get_enemy_action (_enemy: &Character) -> Action {
-    let action: i32 = rand::thread_rng().gen_range(1..=3);
+fn get_enemy_action (enemy: &Character) -> Action {
+    let max_action: i32;
+    if enemy.max_health - enemy.health <= 5 {
+        max_action = 2
+    } else {
+        max_action = 3
+    }
+    let action: i32 = rand::thread_rng().gen_range(1..=max_action);
     match action {
         1 => Action::Attack,
         2 => Action::Defend,
@@ -396,4 +393,39 @@ fn print_status(player: &Character, enemy: &Character) {
 fn reset_blocking(player: &mut Character, enemy: &mut Character) {
     player.is_blocking = false;
     enemy.is_blocking = false;
+}
+fn print_text(ascii: i32) {
+    match ascii {
+        1 => {
+    println!(
+    "                                                                                                                                                                                                                                                                                                                                 
+▗▖ ▗▖▗▄▄▄▖▗▖    ▗▄▄▖ ▗▄▖ ▗▖  ▗▖▗▄▄▄▖    ▗▄▄▄▖▗▄▖     ▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖    ▗▄▄▖ ▗▄▄▖  ▗▄▄▖
+▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▌ ▐▌▐▛▚▞▜▌▐▌         █ ▐▌ ▐▌    ▐▛▚▞▜▌  █  ▐▛▚▖▐▌  █      ▐▌ ▐▌▐▌ ▐▌▐▌   
+▐▌ ▐▌▐▛▀▀▘▐▌   ▐▌   ▐▌ ▐▌▐▌  ▐▌▐▛▀▀▘      █ ▐▌ ▐▌    ▐▌  ▐▌  █  ▐▌ ▝▜▌  █      ▐▛▀▚▖▐▛▀▘ ▐▌▝▜▌
+▐▙█▟▌▐▙▄▄▖▐▙▄▄▖▝▚▄▄▖▝▚▄▞▘▐▌  ▐▌▐▙▄▄▖      █ ▝▚▄▞▘    ▐▌  ▐▌▗▄█▄▖▐▌  ▐▌▗▄█▄▖    ▐▌ ▐▌▐▌   ▝▚▄▞▘                                                   
+        "
+        );
+        }
+        2 => {
+                        println!(
+    "
+▗▖  ▗▖▗▄▖ ▗▖ ▗▖    ▗▖ ▗▖▗▄▄▄▖▗▖  ▗▖
+ ▝▚▞▘▐▌ ▐▌▐▌ ▐▌    ▐▌ ▐▌  █  ▐▛▚▖▐▌
+  ▐▌ ▐▌ ▐▌▐▌ ▐▌    ▐▌ ▐▌  █  ▐▌ ▝▜▌
+  ▐▌ ▝▚▄▞▘▝▚▄▞▘    ▐▙█▟▌▗▄█▄▖▐▌  ▐▌
+        "
+        );
+        }
+        3 => {   
+                        println!(
+    "
+▗▖  ▗▖▗▄▖ ▗▖ ▗▖    ▗▖ ▗▖▗▄▄▄▖▗▄▄▖ ▗▄▄▄▖    ▗▄▄▄ ▗▄▄▄▖▗▄▄▄▖▗▄▄▄▖ ▗▄▖▗▄▄▄▖▗▄▄▄▖▗▄▄▄ 
+ ▝▚▞▘▐▌ ▐▌▐▌ ▐▌    ▐▌ ▐▌▐▌   ▐▌ ▐▌▐▌       ▐▌  █▐▌   ▐▌   ▐▌   ▐▌ ▐▌ █  ▐▌   ▐▌  █
+  ▐▌ ▐▌ ▐▌▐▌ ▐▌    ▐▌ ▐▌▐▛▀▀▘▐▛▀▚▖▐▛▀▀▘    ▐▌  █▐▛▀▀▘▐▛▀▀▘▐▛▀▀▘▐▛▀▜▌ █  ▐▛▀▀▘▐▌  █
+  ▐▌ ▝▚▄▞▘▝▚▄▞▘    ▐▙█▟▌▐▙▄▄▖▐▌ ▐▌▐▙▄▄▖    ▐▙▄▄▀▐▙▄▄▖▐▌   ▐▙▄▄▖▐▌ ▐▌ █  ▐▙▄▄▖▐▙▄▄▀                                                                    
+        "
+        );
+        }
+        _ => unreachable!()
+    }
 }
