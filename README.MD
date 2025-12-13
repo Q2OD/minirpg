@@ -63,3 +63,4 @@ Feel free to open issues or PRs with any experiments—this project is intention
 
 _Changelog_
 - Fri Dec 12 – GitHub repo created.
+- Sat Dec 12 - Enum Refactoring, also continuing working on XP system / level system.
