@@ -56,8 +56,8 @@ impl Character {
             max_health: max_health,
             max_attack: attack,
             level: level,
-            xp: 0,
-            xp_to_next: 10,
+            xp,
+            xp_to_next,
             defense: defense,
             is_blocking: blocking
         };
@@ -189,9 +189,10 @@ impl Character {
                 }
             } 
         }
-        while self.xp < 0 {
-            self.level = self.level - 1 
-        } while self.xp >= self.xp_to_next {
+        // while self.xp < 0 {
+        //     self.level = self.level - 1 
+        // }
+        while self.xp >= self.xp_to_next {
                     self.level = self.level + 1;
                     self.xp = self.xp - self.xp_to_next
         }
@@ -235,11 +236,15 @@ enum EnemyKind {
     Orc,
     Undead
 }
-enum Action {
+enum BattleAction {
     Attack,
     Defend,
     Heal,
     Exit,
+}
+enum MenuAction {
+    Exit,
+    Playagain
 }
 enum XpEvents {
     Gain(i32),
@@ -248,7 +253,7 @@ enum XpEvents {
 }
 // Main Game Function
 fn main() {
-    print_ascii_title(1);
+    print_ascii_banner(1);
     println!("Alpha V1.0.1");
     let mut player = Character::new_character();
     game_loop(&mut player);
@@ -258,7 +263,18 @@ fn game_loop(player: &mut Character) {
         let mut enemy = encounter_enemy(&player);
         let game = battle(player, &mut enemy);
         if game {
-            player.health = player.max_health
+            player.health = player.max_health;
+            let menu_action = get_play_again_action();
+            match menu_action { 
+                MenuAction::Exit => {
+                    print_ascii_banner(5);
+                    exit(0)
+                }
+                MenuAction::Playagain => {
+                    print_ascii_banner(6);
+                    continue;
+                }
+            }
             // Xp Events
         } else {
             println!("You suck get better... bye.");
@@ -283,11 +299,11 @@ fn encounter_enemy(player: &Character) -> Character {
 fn battle(player: &mut Character, enemy: &mut Character) -> bool {
     loop {
         if !player.is_alive() {
-            print_ascii_title(3);
+            print_ascii_banner(3);
             return false;
         }
         if !enemy.is_alive() {
-            print_ascii_title(2);
+            print_ascii_banner(2);
             return true;
         }
         print_status(player, enemy);
@@ -295,12 +311,12 @@ fn battle(player: &mut Character, enemy: &mut Character) -> bool {
         let enemy_action = get_enemy_action(enemy);
         apply_action(player, enemy, player_action);
         if !enemy.is_alive() {
-            print_ascii_title(2);
+            print_ascii_banner(2);
             return true;
         }
         apply_action(enemy, player, enemy_action);
         if !player.is_alive() {
-            print_ascii_title(3);
+            print_ascii_banner(3);
             return false;
         }
         reset_blocking(player, enemy);
@@ -332,21 +348,33 @@ fn input() -> String {
         .expect("Failed to read line");
     line.trim().to_string()
 }
-fn get_player_action () -> Action {
+fn get_player_action () -> BattleAction {
     println!("Choose your action: \n 1) Attack \n 2) Defend \n 3) Heal \n 4) Exit");
     let choice = input();
     match choice.as_str () {
-        "1" => Action::Attack,
-        "2" => Action::Defend,
-        "3" => Action::Heal,
-        "4" => Action::Exit,
+        "1" => BattleAction::Attack,
+        "2" => BattleAction::Defend,
+        "3" => BattleAction::Heal,
+        "4" => BattleAction::Exit,
         _ => {
             println!("Invalid Choice, try again.");
             get_player_action()
         }
     }
 }
-fn get_enemy_action (enemy: &Character) -> Action {
+fn get_play_again_action () -> MenuAction {
+    println!("Play Again? \n y = continue \n n = exit gracefully \n");
+    let action = input();
+    match action.as_str () {
+        "y" => MenuAction::Playagain,
+        "n" => MenuAction::Exit,
+        _ => {
+            println!("Invalid Choice, try again.");
+            get_play_again_action()
+        }
+    }
+}
+fn get_enemy_action (enemy: &Character) -> BattleAction {
     let max_action: i32;
     if enemy.max_health - enemy.health <= 5 {
         max_action = 2
@@ -355,9 +383,9 @@ fn get_enemy_action (enemy: &Character) -> Action {
     }
     let action: i32 = rand::thread_rng().gen_range(1..=max_action);
     match action {
-        1 => Action::Attack,
-        2 => Action::Defend,
-        3 => Action::Heal,
+        1 => BattleAction::Attack,
+        2 => BattleAction::Defend,
+        3 => BattleAction::Heal,
         _ => unreachable!()
     }
 }
@@ -371,24 +399,24 @@ fn calculate_damage(attacker: &Character, defender: &Character) -> i32 {
     }
     return dmg
 }
-fn apply_action(attacker: &mut Character, defender: &mut Character, action: Action) {
+fn apply_action(attacker: &mut Character, defender: &mut Character, action: BattleAction) {
     match action {
-        Action::Attack => {
+        BattleAction::Attack => {
             let damage = calculate_damage(attacker, defender);
             defender.take_damage(damage);
             println!("{}, Attacks {}, takes {} HP from {}", attacker.name, defender.name, damage, defender.name)
         }
-        Action::Defend => {
+        BattleAction::Defend => {
             attacker.is_blocking = true;
             println!("{} is Blocking", attacker.name)
         }
-        Action::Heal => {
+        BattleAction::Heal => {
             attacker.heal(5);
             println!("{} Heals 5 HP leaving them at {} HP", attacker.name, attacker.health);
         }
-        Action::Exit => {
-            println!("Thank you for playing!");
-            exit(1)
+        BattleAction::Exit => {
+            print_ascii_banner(5);
+            exit(0)
         }
     }
 }
@@ -400,7 +428,7 @@ fn reset_blocking(player: &mut Character, enemy: &mut Character) {
     player.is_blocking = false;
     enemy.is_blocking = false;
 }
-fn print_ascii_title(ascii: i32) {
+fn print_ascii_banner(ascii: i32) {
     match ascii {
         1 => {
     println!(
@@ -408,7 +436,7 @@ fn print_ascii_title(ascii: i32) {
 ▗▖ ▗▖▗▄▄▄▖▗▖    ▗▄▄▖ ▗▄▖ ▗▖  ▗▖▗▄▄▄▖    ▗▄▄▄▖▗▄▖     ▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖    ▗▄▄▖ ▗▄▄▖  ▗▄▄▖
 ▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▌ ▐▌▐▛▚▞▜▌▐▌         █ ▐▌ ▐▌    ▐▛▚▞▜▌  █  ▐▛▚▖▐▌  █      ▐▌ ▐▌▐▌ ▐▌▐▌   
 ▐▌ ▐▌▐▛▀▀▘▐▌   ▐▌   ▐▌ ▐▌▐▌  ▐▌▐▛▀▀▘      █ ▐▌ ▐▌    ▐▌  ▐▌  █  ▐▌ ▝▜▌  █      ▐▛▀▚▖▐▛▀▘ ▐▌▝▜▌
-▐▙█▟▌▐▙▄▄▖▐▙▄▄▖▝▚▄▄▖▝▚▄▞▘▐▌  ▐▌▐▙▄▄▖      █ ▝▚▄▞▘    ▐▌  ▐▌▗▄█▄▖▐▌  ▐▌▗▄█▄▖    ▐▌ ▐▌▐▌   ▝▚▄▞▘                                                   
+▐▙█▟▌▐▙▄▄▖▐▙▄▄▖▝▚▄▄▖▝▚▄▞▘▐▌  ▐▌▐▙▄▄▖      █ ▝▚▄▞▘    ▐▌  ▐▌▗▄█▄▖▐▌  ▐▌▗▄█▄▖    ▐▌ ▐▌▐▌   ▝▚▄▞▘                                         
         "
         );
         }
@@ -429,6 +457,46 @@ fn print_ascii_title(ascii: i32) {
  ▝▚▞▘▐▌ ▐▌▐▌ ▐▌    ▐▌ ▐▌▐▌   ▐▌ ▐▌▐▌       ▐▌  █▐▌   ▐▌   ▐▌   ▐▌ ▐▌ █  ▐▌   ▐▌  █
   ▐▌ ▐▌ ▐▌▐▌ ▐▌    ▐▌ ▐▌▐▛▀▀▘▐▛▀▚▖▐▛▀▀▘    ▐▌  █▐▛▀▀▘▐▛▀▀▘▐▛▀▀▘▐▛▀▜▌ █  ▐▛▀▀▘▐▌  █
   ▐▌ ▝▚▄▞▘▝▚▄▞▘    ▐▙█▟▌▐▙▄▄▖▐▌ ▐▌▐▙▄▄▖    ▐▙▄▄▀▐▙▄▄▖▐▌   ▐▙▄▄▖▐▌ ▐▌ █  ▐▙▄▄▖▐▙▄▄▀                                                                    
+        "
+        );
+        }
+        4 => {   
+                        println!(
+    "
+ ▗▄▄▖ ▗▄▖ ▗▖  ▗▖▗▄▄▄▖     ▗▄▖ ▗▖  ▗▖▗▄▄▄▖▗▄▄▖     
+▐▌   ▐▌ ▐▌▐▛▚▞▜▌▐▌       ▐▌ ▐▌▐▌  ▐▌▐▌   ▐▌ ▐▌    
+▐▌▝▜▌▐▛▀▜▌▐▌  ▐▌▐▛▀▀▘    ▐▌ ▐▌▐▌  ▐▌▐▛▀▀▘▐▛▀▚▖    
+▝▚▄▞▘▐▌ ▐▌▐▌  ▐▌▐▙▄▄▖    ▝▚▄▞▘ ▝▚▞▘ ▐▙▄▄▖▐▌ ▐▌                                                           
+        "
+        );
+        }
+        5 => {   
+                        println!(
+    "
+▗▄▄▄▖▗▖ ▗▖ ▗▄▖ ▗▖  ▗▖▗▖ ▗▖    ▗▖  ▗▖▗▄▖ ▗▖ ▗▖    ▗▄▄▄▖ ▗▄▖ ▗▄▄▖     ▗▄▄▖ ▗▖    ▗▄▖▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖ ▗▄▄▖
+  █  ▐▌ ▐▌▐▌ ▐▌▐▛▚▖▐▌▐▌▗▞▘     ▝▚▞▘▐▌ ▐▌▐▌ ▐▌    ▐▌   ▐▌ ▐▌▐▌ ▐▌    ▐▌ ▐▌▐▌   ▐▌ ▐▌▝▚▞▘   █  ▐▛▚▖▐▌▐▌   
+  █  ▐▛▀▜▌▐▛▀▜▌▐▌ ▝▜▌▐▛▚▖       ▐▌ ▐▌ ▐▌▐▌ ▐▌    ▐▛▀▀▘▐▌ ▐▌▐▛▀▚▖    ▐▛▀▘ ▐▌   ▐▛▀▜▌ ▐▌    █  ▐▌ ▝▜▌▐▌▝▜▌
+  █  ▐▌ ▐▌▐▌ ▐▌▐▌  ▐▌▐▌ ▐▌      ▐▌ ▝▚▄▞▘▝▚▄▞▘    ▐▌   ▝▚▄▞▘▐▌ ▐▌    ▐▌   ▐▙▄▄▖▐▌ ▐▌ ▐▌  ▗▄█▄▖▐▌  ▐▌▝▚▄▞▘                                                      
+        "
+        );
+        }
+        6 => {   
+                        println!(
+    "
+▗▄▄▖  ▗▄▖ ▗▖ ▗▖▗▖  ▗▖▗▄▄▄      ▗▄▄▖▗▖ ▗▖▗▖  ▗▖▗▖  ▗▖ ▗▄▖ ▗▄▄▖▗▖  ▗▖
+▐▌ ▐▌▐▌ ▐▌▐▌ ▐▌▐▛▚▖▐▌▐▌  █    ▐▌   ▐▌ ▐▌▐▛▚▞▜▌▐▛▚▞▜▌▐▌ ▐▌▐▌ ▐▌▝▚▞▘ 
+▐▛▀▚▖▐▌ ▐▌▐▌ ▐▌▐▌ ▝▜▌▐▌  █     ▝▀▚▖▐▌ ▐▌▐▌  ▐▌▐▌  ▐▌▐▛▀▜▌▐▛▀▚▖ ▐▌  
+▐▌ ▐▌▝▚▄▞▘▝▚▄▞▘▐▌  ▐▌▐▙▄▄▀    ▗▄▄▞▘▝▚▄▞▘▐▌  ▐▌▐▌  ▐▌▐▌ ▐▌▐▌ ▐▌ ▐▌                                                
+        "
+        );
+        }
+        7 => {
+                        println!(
+    "
+▗▖  ▗▖▗▄▄▄▖▗▖ ▗▖    ▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖▗▖  ▗▖
+▐▛▚▖▐▌▐▌   ▐▌ ▐▌    ▐▌   ▐▛▚▖▐▌▐▌   ▐▛▚▞▜▌ ▝▚▞▘ 
+▐▌ ▝▜▌▐▛▀▀▘▐▌ ▐▌    ▐▛▀▀▘▐▌ ▝▜▌▐▛▀▀▘▐▌  ▐▌  ▐▌  
+▐▌  ▐▌▐▙▄▄▖▐▙█▟▌    ▐▙▄▄▖▐▌  ▐▌▐▙▄▄▖▐▌  ▐▌  ▐▌                  
         "
         );
         }
