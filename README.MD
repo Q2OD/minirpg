@@ -15,7 +15,7 @@ Mini RPG is a turn-based, text-only adventure that runs entirely in your termina
 
 ## Getting Started
 ```bash
-git clone <repo-url>
+git clone https://github.com/Q2OD/minirpg
 cd rpg
 cargo run
 ```
