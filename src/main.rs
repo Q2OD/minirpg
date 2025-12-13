@@ -271,7 +271,7 @@ fn game_loop(player: &mut Character) {
                     exit(0)
                 }
                 MenuAction::Playagain => {
-                    print_ascii_banner(6);
+                    print_ascii_banner(7);
                     continue;
                 }
             }
