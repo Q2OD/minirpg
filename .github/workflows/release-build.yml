@@ -34,7 +34,7 @@ jobs:
         if: runner.os != 'Windows'
         shell: bash
         run: |
-          BIN_NAME="minirpg"
+          BIN_NAME="rpg"
           mkdir -p dist
           cp "target/release/$BIN_NAME" "dist/$BIN_NAME"
           tar -czf "dist/${BIN_NAME}-${{ runner.os }}.tar.gz" -C dist "$BIN_NAME"
@@ -44,7 +44,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
-          $BIN_NAME = "minirpg"
+          $BIN_NAME = "rpg"
           New-Item -ItemType Directory -Force -Path dist | Out-Null
           Copy-Item "target/release/$BIN_NAME.exe" "dist/$BIN_NAME.exe"
           Compress-Archive -Path "dist/$BIN_NAME.exe" -DestinationPath "dist/${BIN_NAME}-${env:RUNNER_OS}.zip"
