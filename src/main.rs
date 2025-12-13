@@ -45,8 +45,8 @@ impl Character {
         let defense = roll_stat("Defense", 3, 7);
         // Static Stats
         let level = 1;
-        let _xp = 0;
-        let _xp_to_next = Self::xp_needed_for_level(level);
+        let xp = 0;
+        let xp_to_next = Self::xp_needed_for_level(level);
         let health = max_health;
         let blocking = false;
 
@@ -157,8 +157,9 @@ impl Character {
             }
         }
     }
+    // XP Functions
     fn xp_needed_for_level(level: i32) -> i32 {
-        let next_level_xp = 10 * level * level;
+        let next_level_xp = 10 * (level * level);
         return next_level_xp
     }
     fn xp_gain(enemy: &mut Character) -> XpEvents {
@@ -183,12 +184,16 @@ impl Character {
             }
             XpEvents::LevelUp => {
                 while self.xp >= self.xp_to_next {
-                    self.level = self.level + 1
+                    self.level = self.level + 1;
+                    self.xp = self.xp - self.xp_to_next
                 }
-            }
+            } 
         }
-        while self.xp >= self.xp_to_next {
-
+        while self.xp < 0 {
+            self.level = self.level - 1 
+        } while self.xp >= self.xp_to_next {
+                    self.level = self.level + 1;
+                    self.xp = self.xp - self.xp_to_next
         }
     }
     fn is_alive(&self) -> bool {
@@ -243,7 +248,8 @@ enum XpEvents {
 }
 // Main Game Function
 fn main() {
-    print_text(1);
+    print_ascii_title(1);
+    println!("Alpha V1.0.1");
     let mut player = Character::new_character();
     game_loop(&mut player);
 }
@@ -277,11 +283,11 @@ fn encounter_enemy(player: &Character) -> Character {
 fn battle(player: &mut Character, enemy: &mut Character) -> bool {
     loop {
         if !player.is_alive() {
-            print_text(3);
+            print_ascii_title(3);
             return false;
         }
         if !enemy.is_alive() {
-            print_text(2);
+            print_ascii_title(2);
             return true;
         }
         print_status(player, enemy);
@@ -289,12 +295,12 @@ fn battle(player: &mut Character, enemy: &mut Character) -> bool {
         let enemy_action = get_enemy_action(enemy);
         apply_action(player, enemy, player_action);
         if !enemy.is_alive() {
-            print_text(2);
+            print_ascii_title(2);
             return true;
         }
         apply_action(enemy, player, enemy_action);
         if !player.is_alive() {
-            print_text(3);
+            print_ascii_title(3);
             return false;
         }
         reset_blocking(player, enemy);
@@ -309,16 +315,16 @@ fn roll_stat(stat_name: &str, min: i32, max: i32) -> i32 {
     );
     return value
 }
-// fn roll_level_stat(player:&Character, stat_name: &str, min: i32, max: i32) -> i32 {
-//     let factor = 1.0 + (player.level as f32 * 0.05);
-//     let min_factored = 1;
-//     let value = rand::thread_rng().gen_range(min..=max);
-//     println!(
-//         "Rolling {} ({}-{})... you got {}!",
-//         stat_name, min, max, value
-//     );
-//     return value
-// }
+fn roll_level_stat(player:&Character, stat_name: &str, min: i32, max: i32) -> i32 {
+    let factor = 1.0 + (player.level as f32 * 0.05);
+    let min_factored = (min as f32 * factor) as i32;
+    let value = rand::thread_rng().gen_range(min_factored..=max);
+    println!(
+        "Rolling {} ({}-{})... you got {}!",
+        stat_name, min, max, value
+    );
+    return value
+}
 fn input() -> String {
     let mut line = String::new();
     io::stdin()
@@ -394,7 +400,7 @@ fn reset_blocking(player: &mut Character, enemy: &mut Character) {
     player.is_blocking = false;
     enemy.is_blocking = false;
 }
-fn print_text(ascii: i32) {
+fn print_ascii_title(ascii: i32) {
     match ascii {
         1 => {
     println!(
