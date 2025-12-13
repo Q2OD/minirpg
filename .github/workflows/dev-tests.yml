@@ -1,6 +1,8 @@
-name: Dev branch checks
+name: Dev checks
 
 on:
+  push:
+    branches: [ "development" ]
   pull_request:
     branches: [ "development" ]
 
