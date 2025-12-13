@@ -261,6 +261,7 @@ fn main() {
 fn game_loop(player: &mut Character) {
     loop {
         let mut enemy = encounter_enemy(&player);
+        enemy.print_stats();
         let game = battle(player, &mut enemy);
         if game {
             player.health = player.max_health;
