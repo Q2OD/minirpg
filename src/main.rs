@@ -375,12 +375,12 @@ fn get_play_again_action() -> MenuAction {
     }
 }
 fn get_enemy_action(enemy: &Character) -> BattleAction {
-    let max_action: i32;
-    if enemy.max_health - enemy.health <= 5 {
-        max_action = 2
+    
+    let max_action: i32 = if enemy.max_health - enemy.health <= 5 {
+        2
     } else {
-        max_action = 3
-    }
+        3
+    };
     let action: i32 = rand::thread_rng().gen_range(1..=max_action);
     match action {
         1 => BattleAction::Attack,
