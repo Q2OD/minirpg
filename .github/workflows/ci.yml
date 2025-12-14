@@ -1,0 +1,110 @@
+name: Rust CI
+
+on:
+  push:
+    branches: [ "development", "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    name: fmt + clippy + test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --all-targets --all-features -- -D warnings
+      - run: cargo test --all-features
+
+  build:
+    name: Release builds (${{ matrix.os }})
+    needs: check
+    if: github.ref == 'refs/heads/main'
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Build (release)
+        run: cargo build --release --bins
+
+      - name: Package artifact (Linux/macOS) as ZIP
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          mkdir -p dist
+
+          BINS="$(find target/release -maxdepth 1 -type f -perm -111 \
+            ! -name "*.d" ! -name "*.rlib" ! -name "*.a" ! -name "*.so" ! -name "*.dylib")"
+
+          if [ -z "$BINS" ]; then
+            echo "No executables found in target/release"
+            ls -la target/release || true
+            exit 1
+          fi
+
+          for BIN_PATH in $BINS; do
+            BIN_NAME="$(basename "$BIN_PATH")"
+            cp "$BIN_PATH" "dist/$BIN_NAME"
+            zip -j "dist/${BIN_NAME}-${{ runner.os }}.zip" "dist/$BIN_NAME"
+            rm "dist/$BIN_NAME"
+            echo "Packaged $BIN_NAME"
+          done
+
+      - name: Package artifact (Windows) as ZIP
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          $bins = Get-ChildItem -Path target\release -Filter *.exe -File
+          if ($bins.Count -eq 0) { throw "No .exe found in target\release" }
+          foreach ($bin in $bins) {
+            Copy-Item $bin.FullName "dist\$($bin.Name)"
+            Compress-Archive -Path "dist\$($bin.Name)" -DestinationPath "dist\$($bin.BaseName)-$env:RUNNER_OS.zip" -Force
+            Remove-Item "dist\$($bin.Name)"
+          }
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-${{ runner.os }}
+          path: dist/*
+
+  draft_release:
+    name: Draft GitHub Release
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist-all
+
+      - name: Create draft release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          name: "Draft Release - ${{ github.sha }}"
+          tag_name: "draft-${{ github.run_number }}"
+          files: |
+            dist-all/**/*
