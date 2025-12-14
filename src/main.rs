@@ -8,19 +8,20 @@
 // ▐▙▄▞▘ ▐▌      ▝▚▄▄▖▐▌ ▐▌▐▙▄▄▖▐▙▄▄▖▐▙▄▞▘    ▐▌  ▐▌▐▌ ▐▌▝▚▄▞▘
 #![allow(dead_code)]
 // STD Libs
-use std::io;
+use std::io::{self, Write};
 use std::process::exit;
 // Crates
 use rand::Rng;
 // Structs
 
-struct Attacks {
-    name: String,
-    damage: i32,
-    factor: f32,
-    max_damage: i32,
-    uses_left: u8,
-}
+// Planned Features
+// struct Attacks {
+//     name: String,
+//     damage: i32,
+//     factor: f32,
+//     max_damage: i32,
+//     uses_left: u8,
+// }
 struct Character {
     name: String,
     max_health: i32,
@@ -28,12 +29,13 @@ struct Character {
     max_attack: i32,
     defense: i32,
     level: i32,
-    xp: i32,
-    xp_to_next: i32,
+    // xp: i32,
+    // xp_to_next: i32,
     is_blocking: bool,
 }
 // Methods
-impl Attacks {}
+// Planned Features
+// impl Attacks {}
 impl Character {
     fn new_character() -> Character {
         println!("Please enter a character name");
@@ -44,8 +46,8 @@ impl Character {
         let defense = roll_stat("Defense", 3, 7);
         // Static Stats
         let level = 1;
-        let xp = 0;
-        let xp_to_next = Self::xp_needed_for_level(level);
+        // let xp = 0;
+        // let xp_to_next = Self::xp_needed_for_level(level);
         let health = max_health;
         let blocking = false;
 
@@ -55,13 +57,15 @@ impl Character {
             max_health,
             max_attack: attack,
             level,
-            xp,
-            xp_to_next,
+            // xp,
+            // xp_to_next,
             defense,
             is_blocking: blocking,
         };
         println!("Your character has been created.");
+        clear_screen();
         player.print_stats();
+        turn_separator();
         player
     }
 
@@ -87,8 +91,8 @@ impl Character {
                     max_health,
                     max_attack,
                     defense,
-                    xp_to_next: 0,
-                    xp: 0,
+                    // xp_to_next: 0,
+                    // xp: 0,
                     level,
                     is_blocking: false,
                 }
@@ -107,8 +111,8 @@ impl Character {
                     max_health,
                     max_attack,
                     defense,
-                    xp_to_next: 0,
-                    xp: 0,
+                    // xp_to_next: 0,
+                    // xp: 0,
                     level,
                     is_blocking: false,
                 }
@@ -127,8 +131,8 @@ impl Character {
                     max_health,
                     max_attack,
                     defense,
-                    xp_to_next: 0,
-                    xp: 0,
+                    // xp_to_next: 0,
+                    // xp: 0,
                     level,
                     is_blocking: false,
                 }
@@ -147,8 +151,8 @@ impl Character {
                     max_health,
                     max_attack,
                     defense,
-                    xp_to_next: 0,
-                    xp: 0,
+                    // xp_to_next: 0,
+                    // xp: 0,
                     level,
                     is_blocking: false,
                 }
@@ -156,42 +160,43 @@ impl Character {
         }
     }
     // XP Functions
-    fn xp_needed_for_level(level: i32) -> i32 {
-        10 * (level * level)
-    }
-    fn xp_gain(enemy: &mut Character) -> XpEvents {
-        let reward = 2 * enemy.level;
-        XpEvents::Gain(reward)
-    }
-    fn xp_lose(enemy: &mut Character) -> XpEvents {
-        let penalty = 3 * enemy.level;
-        XpEvents::Lose(penalty)
-    }
-    fn apply_xp(&mut self, event: XpEvents) {
-        match event {
-            XpEvents::Gain(amount) => self.xp += amount,
-            XpEvents::Lose(amount) => {
-                if self.xp < amount {
-                    self.xp = 0
-                } else {
-                    self.xp -= amount
-                }
-            }
-            XpEvents::LevelUp => {
-                while self.xp >= self.xp_to_next {
-                    self.level += 1;
-                    self.xp -= self.xp_to_next
-                }
-            }
-        }
-        // while self.xp < 0 {
-        //     self.level = self.level - 1
-        // }
-        while self.xp >= self.xp_to_next {
-            self.level += 1;
-            self.xp -= self.xp_to_next
-        }
-    }
+    // Planned Feature
+    // fn xp_needed_for_level(level: i32) -> i32 {
+    //     10 * (level * level)
+    // }
+    // fn xp_gain(enemy: &mut Character) -> XpEvents {
+    //     let reward = 2 * enemy.level;
+    //     XpEvents::Gain(reward)
+    // }
+    // fn xp_lose(enemy: &mut Character) -> XpEvents {
+    //     let penalty = 3 * enemy.level;
+    //     XpEvents::Lose(penalty)
+    // }
+    // fn apply_xp(&mut self, event: XpEvents) {
+    //     match event {
+    //         XpEvents::Gain(amount) => self.xp += amount,
+    //         XpEvents::Lose(amount) => {
+    //             if self.xp < amount {
+    //                 self.xp = 0
+    //             } else {
+    //                 self.xp -= amount
+    //             }
+    //         }
+    //         XpEvents::LevelUp => {
+    //             while self.xp >= self.xp_to_next {
+    //                 self.level += 1;
+    //                 self.xp -= self.xp_to_next
+    //             }
+    //         }
+    //     }
+    //     // while self.xp < 0 {
+    //     //     self.level = self.level - 1
+    //     // }
+    //     while self.xp >= self.xp_to_next {
+    //         self.level += 1;
+    //         self.xp -= self.xp_to_next
+    //     }
+    // }
     fn is_alive(&self) -> bool {
         self.health > 0
     }
@@ -243,13 +248,19 @@ enum BattleAction {
 }
 enum MenuAction {
     Exit,
-    Playagain,
+    PlayAgain,
 }
-enum XpEvents {
-    Gain(i32),
-    Lose(i32),
-    LevelUp,
+enum BoxType {
+    Attack,
+    Defend,
+    Heal,
 }
+// Planned Feature
+// enum XpEvents {
+//     Gain(i32),
+//     Lose(i32),
+//     LevelUp,
+// }
 // Main Game Function
 fn main() {
     print_ascii_banner(1);
@@ -260,29 +271,21 @@ fn main() {
 fn game_loop(player: &mut Character) {
     loop {
         let mut enemy = encounter_enemy(player);
-        enemy.print_stats();
+        println!("A level {} {} Appears!", enemy.level, enemy.name);
         let game = battle(player, &mut enemy);
         if game {
-            player.health = player.max_health;
-            let menu_action = get_play_again_action();
-            match menu_action {
-                MenuAction::Exit => {
-                    print_ascii_banner(5);
-                    exit(0)
-                }
-                MenuAction::Playagain => {
-                    print_ascii_banner(7);
-                    continue;
-                }
+            if win_handler(player, &enemy) {
+                continue;
             }
             // Xp Events
         } else {
-            println!("You suck get better... bye.");
-            exit(0);
+            if lose_handler(player, &enemy) {
+                continue;
+            }
         }
     }
 }
-fn encounter_enemy(player: &Character) -> Character {
+fn encounter_enemy(player: &mut Character) -> Character {
     let random_kind = rand::thread_rng().gen_range(0..=3);
     let maxlevel = player.level + 3;
     let kind = match random_kind {
@@ -293,7 +296,6 @@ fn encounter_enemy(player: &Character) -> Character {
         _ => unreachable!(),
     };
     let enemy = Character::new_enemy(kind, maxlevel);
-    println!("A level {} {} appears!", enemy.level, enemy.name);
     enemy
 }
 fn battle(player: &mut Character, enemy: &mut Character) -> bool {
@@ -306,7 +308,9 @@ fn battle(player: &mut Character, enemy: &mut Character) -> bool {
             print_ascii_banner(2);
             return true;
         }
+        turn_separator();
         print_status(player, enemy);
+        turn_separator();
         let player_action = get_player_action();
         let enemy_action = get_enemy_action(enemy);
         apply_action(player, enemy, player_action);
@@ -314,6 +318,7 @@ fn battle(player: &mut Character, enemy: &mut Character) -> bool {
             print_ascii_banner(2);
             return true;
         }
+        turn_separator();
         apply_action(enemy, player, enemy_action);
         if !player.is_alive() {
             print_ascii_banner(3);
@@ -331,16 +336,16 @@ fn roll_stat(stat_name: &str, min: i32, max: i32) -> i32 {
     );
     value
 }
-fn roll_level_stat(player: &Character, stat_name: &str, min: i32, max: i32) -> i32 {
-    let factor = 1.0 + (player.level as f32 * 0.05);
-    let min_factored = (min as f32 * factor) as i32;
-    let value = rand::thread_rng().gen_range(min_factored..=max);
-    println!(
-        "Rolling {} ({}-{})... you got {}!",
-        stat_name, min, max, value
-    );
-    value
-}
+// fn roll_level_stat(player: &Character, stat_name: &str, min: i32, max: i32) -> i32 {
+//     let factor = 1.0 + (player.level as f32 * 0.05);
+//     let min_factored = (min as f32 * factor) as i32;
+//     let value = rand::thread_rng().gen_range(min_factored..=max);
+//     println!(
+//         "Rolling {} ({}-{})... you got {}!",
+//         stat_name, min, max, value
+//     );
+//     value
+// }
 fn input() -> String {
     let mut line = String::new();
     io::stdin()
@@ -366,7 +371,7 @@ fn get_play_again_action() -> MenuAction {
     println!("Play Again? \n y = continue \n n = exit gracefully \n");
     let action = input();
     match action.as_str() {
-        "y" => MenuAction::Playagain,
+        "y" => MenuAction::PlayAgain,
         "n" => MenuAction::Exit,
         _ => {
             println!("Invalid Choice, try again.");
@@ -380,7 +385,12 @@ fn get_enemy_action(enemy: &Character) -> BattleAction {
     } else {
         3
     };
-    let action: i32 = rand::thread_rng().gen_range(1..=max_action);
+    let min_action: i32 = if enemy.max_health < enemy.health * 3 {
+        2
+    } else {
+        1
+    };
+    let action: i32 = rand::thread_rng().gen_range(min_action..=max_action);
     match action {
         1 => BattleAction::Attack,
         2 => BattleAction::Defend,
@@ -403,23 +413,18 @@ fn apply_action(attacker: &mut Character, defender: &mut Character, action: Batt
         BattleAction::Attack => {
             let damage = calculate_damage(attacker, defender);
             defender.take_damage(damage);
-            println!(
-                "{}, Attacks {}, takes {} HP from {}",
-                attacker.name, defender.name, damage, defender.name
-            )
+            print_box(attacker, defender, damage, BoxType::Attack);
         }
         BattleAction::Defend => {
             attacker.is_blocking = true;
-            println!("{} is Blocking", attacker.name)
+            print_box(attacker, defender, 0, BoxType::Defend);
         }
         BattleAction::Heal => {
             attacker.heal(5);
-            println!(
-                "{} Heals 5 HP leaving them at {} HP",
-                attacker.name, attacker.health
-            );
+            print_box(attacker, defender, 5, BoxType::Heal);
         }
         BattleAction::Exit => {
+            clear_screen();
             print_ascii_banner(5);
             exit(0)
         }
@@ -430,7 +435,11 @@ fn print_status(player: &Character, enemy: &Character) {
         "{}: {}/ {} HP",
         player.name, player.health, player.max_health
     );
-    println!("{}: {}/ {} HP", enemy.name, enemy.health, enemy.max_health);
+    turn_separator();
+    println!(
+        "{}: {}/ {} HP",
+        enemy.name, enemy.health, enemy.max_health
+    );
 }
 fn reset_blocking(player: &mut Character, enemy: &mut Character) {
     player.is_blocking = false;
@@ -509,5 +518,72 @@ fn print_ascii_banner(ascii: i32) {
             );
         }
         _ => unreachable!(),
+    }
+}
+fn turn_separator() {
+    println!("████████████████████████")
+}
+fn clear_screen() {
+    print!("\x1B[2J\x1B[1;1H");
+    io::stdout().flush().unwrap()
+}
+fn print_box(attacker: &Character, defender: &Character, amount: i32, box_type: BoxType) {
+    let message = match box_type {
+        BoxType::Attack => {
+            format!(
+                "{} takes {} HP from {}.",
+                defender.name, amount, attacker.name
+            )
+        }
+        BoxType::Heal => {
+            format!(
+                "{} heals {} HP.",
+                attacker.name, amount
+            )
+        }
+        BoxType::Defend => {
+            format!(
+                "{} is blocking.",
+                attacker.name
+            )
+        }
+    };
+    let padding: usize = 4;
+    let width = message.len() + padding;
+    println!("┌{}┐", "─".repeat(width));
+    println!("│{:^width$}│", message, width = width);
+    println!("└{}┘", "─".repeat(width));
+}
+fn win_handler(player: &mut Character, enemy: &Character) -> bool {
+    let amount_restored = player.max_health - player.health;
+    player.health = player.max_health;
+    println!("{} defeated {}", player.name, enemy.name);
+    println!("Restored {} HP to {}", amount_restored, player.name);
+    let menu_action = get_play_again_action();
+    print_ascii_banner(6);
+    println!("");
+    match menu_action {
+    MenuAction::Exit => {
+        print_ascii_banner(5);
+        exit(0)
+    }
+    MenuAction::PlayAgain => {
+        print_ascii_banner(7);
+        true
+    }
+}
+}
+fn lose_handler(player: &mut Character, enemy: &Character) -> bool {
+    println!("{} lose to {}", player.name, enemy.name);
+    let menu_action = get_play_again_action();
+        match menu_action {
+        MenuAction::Exit => {
+            print_ascii_banner(5);
+            exit(0)
+        }
+        MenuAction::PlayAgain => {
+            print_ascii_banner(7);
+            true
+        }
     }
 }
