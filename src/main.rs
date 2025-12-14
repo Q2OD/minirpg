@@ -1,21 +1,21 @@
 // ▗▖ ▗▖▗▄▄▄▖▗▖    ▗▄▄▖ ▗▄▖ ▗▖  ▗▖▗▄▄▄▖    ▗▄▄▄▖▗▄▖     ▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖    ▗▄▄▖ ▗▄▄▖  ▗▄▄▖
-// ▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▌ ▐▌▐▛▚▞▜▌▐▌         █ ▐▌ ▐▌    ▐▛▚▞▜▌  █  ▐▛▚▖▐▌  █      ▐▌ ▐▌▐▌ ▐▌▐▌   
+// ▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▌ ▐▌▐▛▚▞▜▌▐▌         █ ▐▌ ▐▌    ▐▛▚▞▜▌  █  ▐▛▚▖▐▌  █      ▐▌ ▐▌▐▌ ▐▌▐▌
 // ▐▌ ▐▌▐▛▀▀▘▐▌   ▐▌   ▐▌ ▐▌▐▌  ▐▌▐▛▀▀▘      █ ▐▌ ▐▌    ▐▌  ▐▌  █  ▐▌ ▝▜▌  █      ▐▛▀▚▖▐▛▀▘ ▐▌▝▜▌
-// ▐▙█▟▌▐▙▄▄▖▐▙▄▄▖▝▚▄▄▖▝▚▄▞▘▐▌  ▐▌▐▙▄▄▖      █ ▝▚▄▞▘    ▐▌  ▐▌▗▄█▄▖▐▌  ▐▌▗▄█▄▖    ▐▌ ▐▌▐▌   ▝▚▄▞▘                                                                                              
+// ▐▙█▟▌▐▙▄▄▖▐▙▄▄▖▝▚▄▄▖▝▚▄▞▘▐▌  ▐▌▐▙▄▄▖      █ ▝▚▄▞▘    ▐▌  ▐▌▗▄█▄▖▐▌  ▐▌▗▄█▄▖    ▐▌ ▐▌▐▌   ▝▚▄▞▘
 // ▗▄▄▖▗▖  ▗▖     ▗▄▄▖ ▗▄▖ ▗▖   ▗▄▄▄▖▗▄▄▖     ▗▖  ▗▖ ▗▄▖ ▗▖ ▗▖
 // ▐▌ ▐▌▝▚▞▘     ▐▌   ▐▌ ▐▌▐▌   ▐▌   ▐▌ ▐▌    ▐▛▚▞▜▌▐▌ ▐▌▐▌ ▐▌
 // ▐▛▀▚▖ ▐▌      ▐▌   ▐▛▀▜▌▐▌   ▐▛▀▀▘▐▛▀▚▖    ▐▌  ▐▌▐▛▀▜▌▐▌ ▐▌
-// ▐▙▄▞▘ ▐▌      ▝▚▄▄▖▐▌ ▐▌▐▙▄▄▖▐▙▄▄▖▐▙▄▞▘    ▐▌  ▐▌▐▌ ▐▌▝▚▄▞▘                                                                                                                                                                                                                                        
+// ▐▙▄▞▘ ▐▌      ▝▚▄▄▖▐▌ ▐▌▐▙▄▄▖▐▙▄▄▖▐▙▄▞▘    ▐▌  ▐▌▐▌ ▐▌▝▚▄▞▘
 #![allow(dead_code)]
 // STD Libs
 use std::io;
 use std::process::exit;
 // Crates
-use rand::{Rng};
+use rand::Rng;
 // Structs
 
 struct Attacks {
-    name: String, 
+    name: String,
     damage: i32,
     factor: f32,
     max_damage: i32,
@@ -30,11 +30,10 @@ struct Character {
     level: i32,
     xp: i32,
     xp_to_next: i32,
-    is_blocking: bool
+    is_blocking: bool,
 }
 // Methods
-impl Attacks {
-}
+impl Attacks {}
 impl Character {
     fn new_character() -> Character {
         println!("Please enter a character name");
@@ -59,11 +58,11 @@ impl Character {
             xp,
             xp_to_next,
             defense: defense,
-            is_blocking: blocking
+            is_blocking: blocking,
         };
         println!("Your character has been created.");
         player.print_stats();
-        return player
+        return player;
     }
 
     fn new_enemy(kind: EnemyKind, maxlevel: i32) -> Character {
@@ -92,7 +91,7 @@ impl Character {
                     xp_to_next: 0,
                     xp: 0,
                     level: level,
-                    is_blocking: false
+                    is_blocking: false,
                 }
             }
             EnemyKind::Undead => {
@@ -112,7 +111,7 @@ impl Character {
                     xp_to_next: 0,
                     xp: 0,
                     level: level,
-                    is_blocking: false
+                    is_blocking: false,
                 }
             }
             EnemyKind::Goblin => {
@@ -132,7 +131,7 @@ impl Character {
                     xp_to_next: 0,
                     xp: 0,
                     level: level,
-                    is_blocking: false
+                    is_blocking: false,
                 }
             }
             EnemyKind::Orc => {
@@ -152,7 +151,7 @@ impl Character {
                     xp_to_next: 0,
                     xp: 0,
                     level: level,
-                    is_blocking: false
+                    is_blocking: false,
                 }
             }
         }
@@ -160,21 +159,19 @@ impl Character {
     // XP Functions
     fn xp_needed_for_level(level: i32) -> i32 {
         let next_level_xp = 10 * (level * level);
-        return next_level_xp
+        return next_level_xp;
     }
     fn xp_gain(enemy: &mut Character) -> XpEvents {
         let reward = 2 * enemy.level;
-        return XpEvents::Gain(reward)
+        return XpEvents::Gain(reward);
     }
     fn xp_lose(enemy: &mut Character) -> XpEvents {
         let penalty = 3 * enemy.level;
-        return XpEvents::Lose(penalty)
+        return XpEvents::Lose(penalty);
     }
     fn apply_xp(&mut self, event: XpEvents) {
         match event {
-            XpEvents::Gain(amount) => {
-                self.xp = self.xp + amount
-            }
+            XpEvents::Gain(amount) => self.xp = self.xp + amount,
             XpEvents::Lose(amount) => {
                 if self.xp < amount {
                     self.xp = 0
@@ -187,23 +184,27 @@ impl Character {
                     self.level = self.level + 1;
                     self.xp = self.xp - self.xp_to_next
                 }
-            } 
+            }
         }
         // while self.xp < 0 {
-        //     self.level = self.level - 1 
+        //     self.level = self.level - 1
         // }
         while self.xp >= self.xp_to_next {
-                    self.level = self.level + 1;
-                    self.xp = self.xp - self.xp_to_next
+            self.level = self.level + 1;
+            self.xp = self.xp - self.xp_to_next
         }
     }
     fn is_alive(&self) -> bool {
         self.health > 0
     }
     fn attack_roll(&self) -> i32 {
-        let max = if self.max_attack < 1 { 1 } else { self.max_attack };
+        let max = if self.max_attack < 1 {
+            1
+        } else {
+            self.max_attack
+        };
         let roll = rand::thread_rng().gen_range(1..=max);
-        return roll
+        return roll;
     }
     fn take_damage(&mut self, amount: i32) {
         let damage: i32 = self.health - amount;
@@ -234,7 +235,7 @@ enum EnemyKind {
     Slime,
     Goblin,
     Orc,
-    Undead
+    Undead,
 }
 enum BattleAction {
     Attack,
@@ -244,7 +245,7 @@ enum BattleAction {
 }
 enum MenuAction {
     Exit,
-    Playagain
+    Playagain,
 }
 enum XpEvents {
     Gain(i32),
@@ -266,7 +267,7 @@ fn game_loop(player: &mut Character) {
         if game {
             player.health = player.max_health;
             let menu_action = get_play_again_action();
-            match menu_action { 
+            match menu_action {
                 MenuAction::Exit => {
                     print_ascii_banner(5);
                     exit(0)
@@ -295,7 +296,7 @@ fn encounter_enemy(player: &Character) -> Character {
     };
     let enemy = Character::new_enemy(kind, maxlevel);
     println!("A level {} {} appears!", enemy.level, enemy.name);
-    return enemy
+    return enemy;
 }
 fn battle(player: &mut Character, enemy: &mut Character) -> bool {
     loop {
@@ -330,9 +331,9 @@ fn roll_stat(stat_name: &str, min: i32, max: i32) -> i32 {
         "Rolling {} ({}-{})... you got {}!",
         stat_name, min, max, value
     );
-    return value
+    return value;
 }
-fn roll_level_stat(player:&Character, stat_name: &str, min: i32, max: i32) -> i32 {
+fn roll_level_stat(player: &Character, stat_name: &str, min: i32, max: i32) -> i32 {
     let factor = 1.0 + (player.level as f32 * 0.05);
     let min_factored = (min as f32 * factor) as i32;
     let value = rand::thread_rng().gen_range(min_factored..=max);
@@ -340,7 +341,7 @@ fn roll_level_stat(player:&Character, stat_name: &str, min: i32, max: i32) -> i3
         "Rolling {} ({}-{})... you got {}!",
         stat_name, min, max, value
     );
-    return value
+    return value;
 }
 fn input() -> String {
     let mut line = String::new();
@@ -349,10 +350,10 @@ fn input() -> String {
         .expect("Failed to read line");
     line.trim().to_string()
 }
-fn get_player_action () -> BattleAction {
+fn get_player_action() -> BattleAction {
     println!("Choose your action: \n 1) Attack \n 2) Defend \n 3) Heal \n 4) Exit");
     let choice = input();
-    match choice.as_str () {
+    match choice.as_str() {
         "1" => BattleAction::Attack,
         "2" => BattleAction::Defend,
         "3" => BattleAction::Heal,
@@ -363,10 +364,10 @@ fn get_player_action () -> BattleAction {
         }
     }
 }
-fn get_play_again_action () -> MenuAction {
+fn get_play_again_action() -> MenuAction {
     println!("Play Again? \n y = continue \n n = exit gracefully \n");
     let action = input();
-    match action.as_str () {
+    match action.as_str() {
         "y" => MenuAction::Playagain,
         "n" => MenuAction::Exit,
         _ => {
@@ -375,7 +376,7 @@ fn get_play_again_action () -> MenuAction {
         }
     }
 }
-fn get_enemy_action (enemy: &Character) -> BattleAction {
+fn get_enemy_action(enemy: &Character) -> BattleAction {
     let max_action: i32;
     if enemy.max_health - enemy.health <= 5 {
         max_action = 2
@@ -387,7 +388,7 @@ fn get_enemy_action (enemy: &Character) -> BattleAction {
         1 => BattleAction::Attack,
         2 => BattleAction::Defend,
         3 => BattleAction::Heal,
-        _ => unreachable!()
+        _ => unreachable!(),
     }
 }
 fn calculate_damage(attacker: &Character, defender: &Character) -> i32 {
@@ -398,14 +399,17 @@ fn calculate_damage(attacker: &Character, defender: &Character) -> i32 {
     if dmg < 0 {
         dmg = 0;
     }
-    return dmg
+    return dmg;
 }
 fn apply_action(attacker: &mut Character, defender: &mut Character, action: BattleAction) {
     match action {
         BattleAction::Attack => {
             let damage = calculate_damage(attacker, defender);
             defender.take_damage(damage);
-            println!("{}, Attacks {}, takes {} HP from {}", attacker.name, defender.name, damage, defender.name)
+            println!(
+                "{}, Attacks {}, takes {} HP from {}",
+                attacker.name, defender.name, damage, defender.name
+            )
         }
         BattleAction::Defend => {
             attacker.is_blocking = true;
@@ -413,7 +417,10 @@ fn apply_action(attacker: &mut Character, defender: &mut Character, action: Batt
         }
         BattleAction::Heal => {
             attacker.heal(5);
-            println!("{} Heals 5 HP leaving them at {} HP", attacker.name, attacker.health);
+            println!(
+                "{} Heals 5 HP leaving them at {} HP",
+                attacker.name, attacker.health
+            );
         }
         BattleAction::Exit => {
             print_ascii_banner(5);
@@ -422,7 +429,10 @@ fn apply_action(attacker: &mut Character, defender: &mut Character, action: Batt
     }
 }
 fn print_status(player: &Character, enemy: &Character) {
-    println!("{}: {}/ {} HP", player.name, player.health, player.max_health);
+    println!(
+        "{}: {}/ {} HP",
+        player.name, player.health, player.max_health
+    );
     println!("{}: {}/ {} HP", enemy.name, enemy.health, enemy.max_health);
 }
 fn reset_blocking(player: &mut Character, enemy: &mut Character) {
@@ -432,7 +442,7 @@ fn reset_blocking(player: &mut Character, enemy: &mut Character) {
 fn print_ascii_banner(ascii: i32) {
     match ascii {
         1 => {
-    println!(
+            println!(
     "                                                                                                                                                                                                                                                                                                                                 
 ▗▖ ▗▖▗▄▄▄▖▗▖    ▗▄▄▖ ▗▄▖ ▗▖  ▗▖▗▄▄▄▖    ▗▄▄▄▖▗▄▖     ▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖    ▗▄▄▖ ▗▄▄▖  ▗▄▄▖
 ▐▌ ▐▌▐▌   ▐▌   ▐▌   ▐▌ ▐▌▐▛▚▞▜▌▐▌         █ ▐▌ ▐▌    ▐▛▚▞▜▌  █  ▐▛▚▖▐▌  █      ▐▌ ▐▌▐▌ ▐▌▐▌   
@@ -442,17 +452,17 @@ fn print_ascii_banner(ascii: i32) {
         );
         }
         2 => {
-                        println!(
-    "
+            println!(
+                "
 ▗▖  ▗▖▗▄▖ ▗▖ ▗▖    ▗▖ ▗▖▗▄▄▄▖▗▖  ▗▖
  ▝▚▞▘▐▌ ▐▌▐▌ ▐▌    ▐▌ ▐▌  █  ▐▛▚▖▐▌
   ▐▌ ▐▌ ▐▌▐▌ ▐▌    ▐▌ ▐▌  █  ▐▌ ▝▜▌
   ▐▌ ▝▚▄▞▘▝▚▄▞▘    ▐▙█▟▌▗▄█▄▖▐▌  ▐▌
         "
-        );
+            );
         }
-        3 => {   
-                        println!(
+        3 => {
+            println!(
     "
 ▗▖  ▗▖▗▄▖ ▗▖ ▗▖    ▗▖ ▗▖▗▄▄▄▖▗▄▄▖ ▗▄▄▄▖    ▗▄▄▄ ▗▄▄▄▖▗▄▄▄▖▗▄▄▄▖ ▗▄▖▗▄▄▄▖▗▄▄▄▖▗▄▄▄ 
  ▝▚▞▘▐▌ ▐▌▐▌ ▐▌    ▐▌ ▐▌▐▌   ▐▌ ▐▌▐▌       ▐▌  █▐▌   ▐▌   ▐▌   ▐▌ ▐▌ █  ▐▌   ▐▌  █
@@ -461,8 +471,8 @@ fn print_ascii_banner(ascii: i32) {
         "
         );
         }
-        4 => {   
-                        println!(
+        4 => {
+            println!(
     "
  ▗▄▄▖ ▗▄▖ ▗▖  ▗▖▗▄▄▄▖     ▗▄▖ ▗▖  ▗▖▗▄▄▄▖▗▄▄▖     
 ▐▌   ▐▌ ▐▌▐▛▚▞▜▌▐▌       ▐▌ ▐▌▐▌  ▐▌▐▌   ▐▌ ▐▌    
@@ -471,8 +481,8 @@ fn print_ascii_banner(ascii: i32) {
         "
         );
         }
-        5 => {   
-                        println!(
+        5 => {
+            println!(
     "
 ▗▄▄▄▖▗▖ ▗▖ ▗▄▖ ▗▖  ▗▖▗▖ ▗▖    ▗▖  ▗▖▗▄▖ ▗▖ ▗▖    ▗▄▄▄▖ ▗▄▖ ▗▄▄▖     ▗▄▄▖ ▗▖    ▗▄▖▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖ ▗▄▄▖
   █  ▐▌ ▐▌▐▌ ▐▌▐▛▚▖▐▌▐▌▗▞▘     ▝▚▞▘▐▌ ▐▌▐▌ ▐▌    ▐▌   ▐▌ ▐▌▐▌ ▐▌    ▐▌ ▐▌▐▌   ▐▌ ▐▌▝▚▞▘   █  ▐▛▚▖▐▌▐▌   
@@ -481,8 +491,8 @@ fn print_ascii_banner(ascii: i32) {
         "
         );
         }
-        6 => {   
-                        println!(
+        6 => {
+            println!(
     "
 ▗▄▄▖  ▗▄▖ ▗▖ ▗▖▗▖  ▗▖▗▄▄▄      ▗▄▄▖▗▖ ▗▖▗▖  ▗▖▗▖  ▗▖ ▗▄▖ ▗▄▄▖▗▖  ▗▖
 ▐▌ ▐▌▐▌ ▐▌▐▌ ▐▌▐▛▚▖▐▌▐▌  █    ▐▌   ▐▌ ▐▌▐▛▚▞▜▌▐▛▚▞▜▌▐▌ ▐▌▐▌ ▐▌▝▚▞▘ 
@@ -492,15 +502,15 @@ fn print_ascii_banner(ascii: i32) {
         );
         }
         7 => {
-                        println!(
-    "
+            println!(
+                "
 ▗▖  ▗▖▗▄▄▄▖▗▖ ▗▖    ▗▄▄▄▖▗▖  ▗▖▗▄▄▄▖▗▖  ▗▖▗▖  ▗▖
 ▐▛▚▖▐▌▐▌   ▐▌ ▐▌    ▐▌   ▐▛▚▖▐▌▐▌   ▐▛▚▞▜▌ ▝▚▞▘ 
 ▐▌ ▝▜▌▐▛▀▀▘▐▌ ▐▌    ▐▛▀▀▘▐▌ ▝▜▌▐▛▀▀▘▐▌  ▐▌  ▐▌  
 ▐▌  ▐▌▐▙▄▄▖▐▙█▟▌    ▐▙▄▄▖▐▌  ▐▌▐▙▄▄▖▐▌  ▐▌  ▐▌                  
         "
-        );
+            );
         }
-        _ => unreachable!()
+        _ => unreachable!(),
     }
 }
