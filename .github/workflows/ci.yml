@@ -50,17 +50,22 @@ jobs:
         shell: bash
         run: |
           mkdir -p dist
-          mapfile -t BINS < <(find target/release -maxdepth 1 -type f -perm -111 \
-            ! -name "*.d" ! -name "*.rlib" ! -name "*.a" ! -name "*.so" ! -name "*.dylib")
-          if [ ${#BINS[@]} -eq 0 ]; then
+
+          BINS="$(find target/release -maxdepth 1 -type f -perm -111 \
+            ! -name "*.d" ! -name "*.rlib" ! -name "*.a" ! -name "*.so" ! -name "*.dylib")"
+
+          if [ -z "$BINS" ]; then
             echo "No executables found in target/release"
+            ls -la target/release || true
             exit 1
           fi
-          for BIN_PATH in "${BINS[@]}"; do
+
+          for BIN_PATH in $BINS; do
             BIN_NAME="$(basename "$BIN_PATH")"
             cp "$BIN_PATH" "dist/$BIN_NAME"
             tar -czf "dist/${BIN_NAME}-${{ runner.os }}.tar.gz" -C dist "$BIN_NAME"
             rm "dist/$BIN_NAME"
+            echo "Packaged $BIN_NAME"
           done
 
       - name: Package artifact (Windows)
