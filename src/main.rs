@@ -278,10 +278,8 @@ fn game_loop(player: &mut Character) {
                 continue;
             }
             // Xp Events
-        } else {
-            if lose_handler(player, &enemy) {
-                continue;
-            }
+        } else if lose_handler(player, &enemy) {
+            continue;
         }
     }
 }
@@ -295,8 +293,8 @@ fn encounter_enemy(player: &mut Character) -> Character {
         3 => EnemyKind::Undead,
         _ => unreachable!(),
     };
-    let enemy = Character::new_enemy(kind, maxlevel);
-    enemy
+    
+    Character::new_enemy(kind, maxlevel)
 }
 fn battle(player: &mut Character, enemy: &mut Character) -> bool {
     loop {
@@ -436,10 +434,7 @@ fn print_status(player: &Character, enemy: &Character) {
         player.name, player.health, player.max_health
     );
     turn_separator();
-    println!(
-        "{}: {}/ {} HP",
-        enemy.name, enemy.health, enemy.max_health
-    );
+    println!("{}: {}/ {} HP", enemy.name, enemy.health, enemy.max_health);
 }
 fn reset_blocking(player: &mut Character, enemy: &mut Character) {
     player.is_blocking = false;
@@ -536,16 +531,10 @@ fn print_box(attacker: &Character, defender: &Character, amount: i32, box_type: 
             )
         }
         BoxType::Heal => {
-            format!(
-                "{} heals {} HP.",
-                attacker.name, amount
-            )
+            format!("{} heals {} HP.", attacker.name, amount)
         }
         BoxType::Defend => {
-            format!(
-                "{} is blocking.",
-                attacker.name
-            )
+            format!("{} is blocking.", attacker.name)
         }
     };
     let padding: usize = 4;
@@ -561,22 +550,22 @@ fn win_handler(player: &mut Character, enemy: &Character) -> bool {
     println!("Restored {} HP to {}", amount_restored, player.name);
     let menu_action = get_play_again_action();
     print_ascii_banner(6);
-    println!("");
+    println!();
     match menu_action {
-    MenuAction::Exit => {
-        print_ascii_banner(5);
-        exit(0)
+        MenuAction::Exit => {
+            print_ascii_banner(5);
+            exit(0)
+        }
+        MenuAction::PlayAgain => {
+            print_ascii_banner(7);
+            true
+        }
     }
-    MenuAction::PlayAgain => {
-        print_ascii_banner(7);
-        true
-    }
-}
 }
 fn lose_handler(player: &mut Character, enemy: &Character) -> bool {
     println!("{} lose to {}", player.name, enemy.name);
     let menu_action = get_play_again_action();
-        match menu_action {
+    match menu_action {
         MenuAction::Exit => {
             print_ascii_banner(5);
             exit(0)
