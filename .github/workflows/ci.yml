@@ -13,6 +13,28 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
+  draft_release:
+    name: Draft GitHub Release
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download all build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist-all
+
+      - name: Create draft release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          name: "Draft Release - ${{ github.sha }}"
+          tag_name: "draft-${{ github.run_number }}"
+          files: |
+            dist-all/**/*
   check:
     name: fmt + clippy + test
     runs-on: ubuntu-latest
