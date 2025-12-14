@@ -293,7 +293,7 @@ fn encounter_enemy(player: &mut Character) -> Character {
         3 => EnemyKind::Undead,
         _ => unreachable!(),
     };
-    
+
     Character::new_enemy(kind, maxlevel)
 }
 fn battle(player: &mut Character, enemy: &mut Character) -> bool {
