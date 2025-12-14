@@ -45,7 +45,7 @@ jobs:
       - name: Build (release)
         run: cargo build --release --bins
 
-      - name: Package artifact (Linux/macOS)
+      - name: Package artifact (Linux/macOS) as ZIP
         if: runner.os != 'Windows'
         shell: bash
         run: |
@@ -63,12 +63,12 @@ jobs:
           for BIN_PATH in $BINS; do
             BIN_NAME="$(basename "$BIN_PATH")"
             cp "$BIN_PATH" "dist/$BIN_NAME"
-            tar -czf "dist/${BIN_NAME}-${{ runner.os }}.tar.gz" -C dist "$BIN_NAME"
+            zip -j "dist/${BIN_NAME}-${{ runner.os }}.zip" "dist/$BIN_NAME"
             rm "dist/$BIN_NAME"
             echo "Packaged $BIN_NAME"
           done
 
-      - name: Package artifact (Windows)
+      - name: Package artifact (Windows) as ZIP
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
@@ -85,6 +85,7 @@ jobs:
         with:
           name: build-${{ runner.os }}
           path: dist/*
+
   draft_release:
     name: Draft GitHub Release
     needs: build
