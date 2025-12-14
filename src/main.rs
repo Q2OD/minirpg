@@ -51,25 +51,24 @@ impl Character {
 
         let player = Character {
             name: player_name,
-            health: health,
-            max_health: max_health,
+            health,
+            max_health,
             max_attack: attack,
-            level: level,
+            level,
             xp,
             xp_to_next,
-            defense: defense,
+            defense,
             is_blocking: blocking,
         };
         println!("Your character has been created.");
         player.print_stats();
-        return player;
+        player
     }
 
     fn new_enemy(kind: EnemyKind, maxlevel: i32) -> Character {
         let mut minlevel = maxlevel - 5;
         if minlevel <= 0 {
             minlevel = 1
-        } else {
         }
         let level = rand::thread_rng().gen_range(minlevel..=maxlevel);
         let factor = 1.0 + (level as f32 * 0.05);
@@ -78,19 +77,19 @@ impl Character {
                 let base_health = 10;
                 let base_attack = 5;
                 let base_defense = 3;
-
-                let health = (base_health as f32 * factor) as i32;
-                let attack = (base_attack as f32 * factor) as i32;
+                let max_health = (base_health as f32 * factor) as i32;
+                let health = max_health;
+                let max_attack = (base_attack as f32 * factor) as i32;
                 let defense = (base_defense as f32 * factor) as i32;
                 Character {
                     name: "Slime".to_string(),
                     health,
-                    max_health: health,
-                    max_attack: attack,
+                    max_health,
+                    max_attack,
                     defense,
                     xp_to_next: 0,
                     xp: 0,
-                    level: level,
+                    level,
                     is_blocking: false,
                 }
             }
@@ -98,19 +97,19 @@ impl Character {
                 let base_health = 20;
                 let base_attack = 5;
                 let base_defense = 2;
-
-                let health = (base_health as f32 * factor) as i32;
-                let attack = (base_attack as f32 * factor) as i32;
+                let max_health = (base_health as f32 * factor) as i32;
+                let health = max_health;
+                let max_attack = (base_attack as f32 * factor) as i32;
                 let defense = (base_defense as f32 * factor) as i32;
                 Character {
                     name: "Undead".to_string(),
                     health,
-                    max_health: health,
-                    max_attack: attack,
+                    max_health,
+                    max_attack,
                     defense,
                     xp_to_next: 0,
                     xp: 0,
-                    level: level,
+                    level,
                     is_blocking: false,
                 }
             }
@@ -118,19 +117,19 @@ impl Character {
                 let base_health = 15;
                 let base_attack = 4;
                 let base_defense = 2;
-
-                let health = (base_health as f32 * factor) as i32;
-                let attack = (base_attack as f32 * factor) as i32;
+                let max_health = (base_health as f32 * factor) as i32;
+                let health = max_health;
+                let max_attack = (base_attack as f32 * factor) as i32;
                 let defense = (base_defense as f32 * factor) as i32;
                 Character {
                     name: "Goblin".to_string(),
                     health,
-                    max_health: health,
-                    max_attack: attack,
+                    max_health,
+                    max_attack,
                     defense,
                     xp_to_next: 0,
                     xp: 0,
-                    level: level,
+                    level,
                     is_blocking: false,
                 }
             }
@@ -138,19 +137,19 @@ impl Character {
                 let base_health = 30;
                 let base_attack = 7;
                 let base_defense = 3;
-
-                let health = (base_health as f32 * factor) as i32;
-                let attack = (base_attack as f32 * factor) as i32;
+                let max_health = (base_health as f32 * factor) as i32;
+                let health = max_health;
+                let max_attack = (base_attack as f32 * factor) as i32;
                 let defense = (base_defense as f32 * factor) as i32;
                 Character {
                     name: "Orc".to_string(),
                     health,
-                    max_health: health,
-                    max_attack: attack,
+                    max_health,
+                    max_attack,
                     defense,
                     xp_to_next: 0,
                     xp: 0,
-                    level: level,
+                    level,
                     is_blocking: false,
                 }
             }
@@ -158,31 +157,30 @@ impl Character {
     }
     // XP Functions
     fn xp_needed_for_level(level: i32) -> i32 {
-        let next_level_xp = 10 * (level * level);
-        return next_level_xp;
+        10 * (level * level)
     }
     fn xp_gain(enemy: &mut Character) -> XpEvents {
         let reward = 2 * enemy.level;
-        return XpEvents::Gain(reward);
+        XpEvents::Gain(reward)
     }
     fn xp_lose(enemy: &mut Character) -> XpEvents {
         let penalty = 3 * enemy.level;
-        return XpEvents::Lose(penalty);
+        XpEvents::Lose(penalty)
     }
     fn apply_xp(&mut self, event: XpEvents) {
         match event {
-            XpEvents::Gain(amount) => self.xp = self.xp + amount,
+            XpEvents::Gain(amount) => self.xp += amount,
             XpEvents::Lose(amount) => {
                 if self.xp < amount {
                     self.xp = 0
                 } else {
-                    self.xp = self.xp - amount
+                    self.xp -= amount
                 }
             }
             XpEvents::LevelUp => {
                 while self.xp >= self.xp_to_next {
-                    self.level = self.level + 1;
-                    self.xp = self.xp - self.xp_to_next
+                    self.level += 1;
+                    self.xp -= self.xp_to_next
                 }
             }
         }
@@ -190,8 +188,8 @@ impl Character {
         //     self.level = self.level - 1
         // }
         while self.xp >= self.xp_to_next {
-            self.level = self.level + 1;
-            self.xp = self.xp - self.xp_to_next
+            self.level += 1;
+            self.xp -= self.xp_to_next
         }
     }
     fn is_alive(&self) -> bool {
@@ -203,8 +201,8 @@ impl Character {
         } else {
             self.max_attack
         };
-        let roll = rand::thread_rng().gen_range(1..=max);
-        return roll;
+
+        rand::thread_rng().gen_range(1..=max)
     }
     fn take_damage(&mut self, amount: i32) {
         let damage: i32 = self.health - amount;
@@ -261,7 +259,7 @@ fn main() {
 }
 fn game_loop(player: &mut Character) {
     loop {
-        let mut enemy = encounter_enemy(&player);
+        let mut enemy = encounter_enemy(player);
         enemy.print_stats();
         let game = battle(player, &mut enemy);
         if game {
@@ -296,7 +294,7 @@ fn encounter_enemy(player: &Character) -> Character {
     };
     let enemy = Character::new_enemy(kind, maxlevel);
     println!("A level {} {} appears!", enemy.level, enemy.name);
-    return enemy;
+    enemy
 }
 fn battle(player: &mut Character, enemy: &mut Character) -> bool {
     loop {
@@ -331,7 +329,7 @@ fn roll_stat(stat_name: &str, min: i32, max: i32) -> i32 {
         "Rolling {} ({}-{})... you got {}!",
         stat_name, min, max, value
     );
-    return value;
+    value
 }
 fn roll_level_stat(player: &Character, stat_name: &str, min: i32, max: i32) -> i32 {
     let factor = 1.0 + (player.level as f32 * 0.05);
@@ -341,7 +339,7 @@ fn roll_level_stat(player: &Character, stat_name: &str, min: i32, max: i32) -> i
         "Rolling {} ({}-{})... you got {}!",
         stat_name, min, max, value
     );
-    return value;
+    value
 }
 fn input() -> String {
     let mut line = String::new();
@@ -399,7 +397,7 @@ fn calculate_damage(attacker: &Character, defender: &Character) -> i32 {
     if dmg < 0 {
         dmg = 0;
     }
-    return dmg;
+    dmg
 }
 fn apply_action(attacker: &mut Character, defender: &mut Character, action: BattleAction) {
     match action {
