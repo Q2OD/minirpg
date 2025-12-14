@@ -375,7 +375,6 @@ fn get_play_again_action() -> MenuAction {
     }
 }
 fn get_enemy_action(enemy: &Character) -> BattleAction {
-    
     let max_action: i32 = if enemy.max_health - enemy.health <= 5 {
         2
     } else {
