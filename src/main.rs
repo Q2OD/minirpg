@@ -28,8 +28,8 @@ struct Character {
     max_attack: i32,
     defense: i32,
     level: i32,
-    // xp: i32,
-    // xp_to_next: i32,
+    xp: i32,
+    xp_to_next: i32,
     is_blocking: bool,
 }
 // Methods
@@ -45,8 +45,8 @@ impl Character {
         let defense = roll_stat("Defense", 3, 7);
         // Static Stats
         let level = 1;
-        // let xp = 0;
-        // let xp_to_next = Self::xp_needed_for_level(level);
+        let xp = 0;
+        let xp_to_next = Self::xp_needed_for_level(level);
         let health = max_health;
         let blocking = false;
 
@@ -56,8 +56,8 @@ impl Character {
             max_health,
             max_attack: attack,
             level,
-            // xp,
-            // xp_to_next,
+            xp,
+            xp_to_next,
             defense,
             is_blocking: blocking,
         };
@@ -90,8 +90,8 @@ impl Character {
                     max_health,
                     max_attack,
                     defense,
-                    // xp_to_next: 0,
-                    // xp: 0,
+                    xp_to_next: 0,
+                    xp: 0,
                     level,
                     is_blocking: false,
                 }
@@ -110,8 +110,8 @@ impl Character {
                     max_health,
                     max_attack,
                     defense,
-                    // xp_to_next: 0,
-                    // xp: 0,
+                    xp_to_next: 0,
+                    xp: 0,
                     level,
                     is_blocking: false,
                 }
@@ -130,8 +130,8 @@ impl Character {
                     max_health,
                     max_attack,
                     defense,
-                    // xp_to_next: 0,
-                    // xp: 0,
+                    xp_to_next: 0,
+                    xp: 0,
                     level,
                     is_blocking: false,
                 }
@@ -150,8 +150,8 @@ impl Character {
                     max_health,
                     max_attack,
                     defense,
-                    // xp_to_next: 0,
-                    // xp: 0,
+                    xp_to_next: 0,
+                    xp: 0,
                     level,
                     is_blocking: false,
                 }
@@ -160,42 +160,42 @@ impl Character {
     }
     // XP Functions
     // Planned Feature
-    // fn xp_needed_for_level(level: i32) -> i32 {
-    //     10 * (level * level)
-    // }
-    // fn xp_gain(enemy: &mut Character) -> XpEvents {
-    //     let reward = 2 * enemy.level;
-    //     XpEvents::Gain(reward)
-    // }
-    // fn xp_lose(enemy: &mut Character) -> XpEvents {
-    //     let penalty = 3 * enemy.level;
-    //     XpEvents::Lose(penalty)
-    // }
-    // fn apply_xp(&mut self, event: XpEvents) {
-    //     match event {
-    //         XpEvents::Gain(amount) => self.xp += amount,
-    //         XpEvents::Lose(amount) => {
-    //             if self.xp < amount {
-    //                 self.xp = 0
-    //             } else {
-    //                 self.xp -= amount
-    //             }
-    //         }
-    //         XpEvents::LevelUp => {
-    //             while self.xp >= self.xp_to_next {
-    //                 self.level += 1;
-    //                 self.xp -= self.xp_to_next
-    //             }
-    //         }
-    //     }
-    //     // while self.xp < 0 {
-    //     //     self.level = self.level - 1
-    //     // }
-    //     while self.xp >= self.xp_to_next {
-    //         self.level += 1;
-    //         self.xp -= self.xp_to_next
-    //     }
-    // }
+    fn xp_needed_for_level(level: i32) -> i32 {
+        10 * (level * level)
+    }
+    fn xp_gain(enemy: &mut Character) -> XpEvents {
+        let reward = 2 * enemy.level;
+        XpEvents::Gain(reward)
+    }
+    fn xp_lose(enemy: &mut Character) -> XpEvents {
+        let penalty = 3 * enemy.level;
+        XpEvents::Lose(penalty)
+    }
+    fn apply_xp(&mut self, event: XpEvents) {
+        match event {
+            XpEvents::Gain(amount) => self.xp += amount,
+            XpEvents::Lose(amount) => {
+                if self.xp < amount {
+                    self.xp = 0
+                } else {
+                    self.xp -= amount
+                }
+            }
+            XpEvents::LevelUp => {
+                while self.xp >= self.xp_to_next {
+                    self.level += 1;
+                    self.xp -= self.xp_to_next
+                }
+            }
+        }
+        // while self.xp < 0 {
+        //     self.level = self.level - 1
+        // }
+        while self.xp >= self.xp_to_next {
+            self.level += 1;
+            self.xp -= self.xp_to_next
+        }
+    }
     fn is_alive(&self) -> bool {
         self.health > 0
     }
@@ -255,11 +255,11 @@ enum BoxType {
     Heal,
 }
 // Planned Feature
-// enum XpEvents {
-//     Gain(i32),
-//     Lose(i32),
-//     LevelUp,
-// }
+enum XpEvents {
+    Gain(i32),
+    Lose(i32),
+    LevelUp,
+}
 // Main Game Function
 fn main() {
     print_ascii_banner(1);
@@ -333,16 +333,16 @@ fn roll_stat(stat_name: &str, min: i32, max: i32) -> i32 {
     );
     value
 }
-// fn roll_level_stat(player: &Character, stat_name: &str, min: i32, max: i32) -> i32 {
-//     let factor = 1.0 + (player.level as f32 * 0.05);
-//     let min_factored = (min as f32 * factor) as i32;
-//     let value = rand::thread_rng().gen_range(min_factored..=max);
-//     println!(
-//         "Rolling {} ({}-{})... you got {}!",
-//         stat_name, min, max, value
-//     );
-//     value
-// }
+fn roll_level_stat(player: &Character, stat_name: &str, min: i32, max: i32) -> i32 {
+    let factor = 1.0 + (player.level as f32 * 0.05);
+    let min_factored = (min as f32 * factor) as i32;
+    let value = rand::thread_rng().gen_range(min_factored..=max);
+    println!(
+        "Rolling {} ({}-{})... you got {}!",
+        stat_name, min, max, value
+    );
+    value
+}
 fn input() -> String {
     let mut line = String::new();
     io::stdin()
