@@ -1,0 +1,41 @@
+use bevy::prelude::*;
+
+use crate::gameplay::{AppState, RpgEngine};
+
+pub struct GamePlugin;
+
+impl Plugin for GamePlugin {
+    fn build(&self, app: &mut App) {
+        app.init_state::<AppState>()
+            .init_resource::<RpgEngine>()
+            .add_systems(Startup, setup_ui)
+            .add_systems(Update, tick_engine);
+    }
+}
+
+fn setup_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
+    // In 0.17, spawning the 2D camera can be this simple:
+    commands.spawn(Camera2d);
+
+    commands.spawn((
+        Text::new("Hello from Bevy 0.17\n(MVP UI Text)"),
+        TextFont {
+            font: asset_server.load("fonts/FiraSans-Bold.ttf"),
+            font_size: 48.0,
+            ..default()
+        },
+        TextLayout::new_with_justify(Justify::Left),
+        // Node controls UI positioning (absolute, top-left, etc.)
+        Node {
+            position_type: PositionType::Absolute,
+            top: px(20),
+            left: px(20),
+            ..default()
+        },
+    ));
+}
+
+fn tick_engine(mut engine: ResMut<RpgEngine>) {
+    engine.ticks += 1;
+    // Later: call your battle step / overworld step here based on state.
+}
