@@ -18,7 +18,7 @@ fn setup_ui(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands.spawn(Camera2d);
 
     commands.spawn((
-        Text::new("Hello from Bevy 0.17\n(MVP UI Text)"),
+        Text::new("Basic UI Text, Not a game"),
         TextFont {
             font: asset_server.load("fonts/FiraSans-Bold.ttf"),
             font_size: 48.0,
