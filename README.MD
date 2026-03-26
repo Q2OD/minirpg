@@ -15,8 +15,8 @@ Mini RPG is a turn-based, text-only adventure that runs entirely in your termina
 
 ## Getting Started
 ```bash
-git clone https://github.com/Q2OD/minirpg
-cd rpg
+git clone https://github.com/calebthecm/minirpg
+cd minirpg
 cargo run
 ```
 1. When the ASCII banner appears, enter a hero name.
